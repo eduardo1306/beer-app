@@ -24,6 +24,7 @@
     "prettier/prettier": "error",
     "class-methods-use-this": "off",
     "import/no-unresolved": "off",
+    "camelcase": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

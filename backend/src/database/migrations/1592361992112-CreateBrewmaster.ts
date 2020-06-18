@@ -40,20 +40,22 @@ export default class CreateBrewmaster1592361992112
             length: '2',
           },
           {
-            name: 'socialMedia_id',
-            type: 'int',
-          },
-          {
-            name: 'beer_id',
-            type: 'int',
-          },
-          {
             name: 'latitude',
             type: 'real',
           },
           {
             name: 'longitude',
             type: 'real',
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

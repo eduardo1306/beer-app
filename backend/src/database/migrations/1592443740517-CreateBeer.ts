@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateSocialMedia1592360594339
-  implements MigrationInterface {
+export default class CreateBeer1592443740517 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'beeer',
+        name: 'beer',
         columns: [
           {
             name: 'id',
@@ -31,6 +30,16 @@ export default class CreateSocialMedia1592360594339
           {
             name: 'description',
             type: 'varchar',
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

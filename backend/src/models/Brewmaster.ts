@@ -2,9 +2,12 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+
+import Beer from './Beer';
+import SocialMedia from './SocialMedia';
 
 @Entity('brewmaster')
 class Brewmaster {
@@ -35,8 +38,18 @@ class Brewmaster {
   @Column()
   uf: string;
 
-  socialMedia_id: number;
+  @ManyToOne(() => SocialMedia)
+  @JoinColumn({ name: 'socialMedia_id' })
+  socialMedia: SocialMedia[];
 
+  @ManyToOne(() => Beer)
+  @JoinColumn({ name: 'beer_id' })
+  beer: Beer[];
+
+  @Column()
+  socalMedia_id: number;
+
+  @Column()
   beer_id: number;
 }
 
