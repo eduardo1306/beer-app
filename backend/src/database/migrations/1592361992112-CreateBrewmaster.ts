@@ -48,6 +48,10 @@ export default class CreateBrewmaster1592361992112
             type: 'real',
           },
           {
+            name: 'whatsapp',
+            type: 'varchar',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

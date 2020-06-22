@@ -27,6 +27,9 @@ class Brewmaster {
   email: string;
 
   @Column()
+  whatsapp: string;
+
+  @Column()
   password: string;
 
   @Column()
@@ -38,19 +41,13 @@ class Brewmaster {
   @Column()
   uf: string;
 
-  @ManyToOne(() => SocialMedia)
+  @ManyToOne(() => SocialMedia, socialMedia => socialMedia.brewmaster)
   @JoinColumn({ name: 'socialMedia_id' })
   socialMedia: SocialMedia[];
 
-  @ManyToOne(() => Beer)
+  @ManyToOne(() => Beer, beer => beer.brewmaster)
   @JoinColumn({ name: 'beer_id' })
   beer: Beer[];
-
-  @Column()
-  socalMedia_id: number;
-
-  @Column()
-  beer_id: number;
 }
 
 export default Brewmaster;

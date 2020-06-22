@@ -13,6 +13,7 @@ export default class CreateRelationBeerSocialMedia1592446304981
       new TableColumn({
         name: 'beer_id',
         type: 'int',
+        isNullable: true,
       }),
     );
 
@@ -21,6 +22,7 @@ export default class CreateRelationBeerSocialMedia1592446304981
       new TableColumn({
         name: 'socialMedia_id',
         type: 'int',
+        isNullable: true,
       }),
     );
 
