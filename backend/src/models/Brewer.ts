@@ -2,15 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
   JoinColumn,
-  ManyToOne,
 } from 'typeorm';
 
 import Beer from './Beer';
 import SocialMedia from './SocialMedia';
 
-@Entity('brewmaster')
-class Brewmaster {
+@Entity('brewer')
+class Brewer {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -41,13 +41,21 @@ class Brewmaster {
   @Column()
   uf: string;
 
-  @ManyToOne(() => SocialMedia, socialMedia => socialMedia.brewmaster)
-  @JoinColumn({ name: 'socialMedia_id' })
+  @OneToMany(() => SocialMedia, socialMedia => socialMedia.brewer)
+  @JoinColumn({
+    name: 'socialMedia_id',
+  })
   socialMedia: SocialMedia[];
 
-  @ManyToOne(() => Beer, beer => beer.brewmaster)
+  @OneToMany(() => Beer, beer => beer.brewer)
   @JoinColumn({ name: 'beer_id' })
   beer: Beer[];
+
+  @Column()
+  beer_id: number;
+
+  @Column()
+  socialMedia_id: number;
 }
 
-export default Brewmaster;
+export default Brewer;

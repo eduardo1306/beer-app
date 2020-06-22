@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-import Brewmaster from './Brewmaster';
+import Brewer from './Brewer';
 
 @Entity('socialMedia')
 class SocialMedia {
@@ -10,8 +10,8 @@ class SocialMedia {
   @Column()
   title: string;
 
-  @OneToMany(() => Brewmaster, brewmaster => brewmaster.socialMedia)
-  brewmaster: Brewmaster;
+  @ManyToOne(() => Brewer, brewer => brewer.socialMedia)
+  brewer: Brewer;
 }
 
 export default SocialMedia;

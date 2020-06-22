@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import brewmasterRoutes from './brewmaster.routes';
+import brewerRouter from './brewer.routes';
 
 const routes = Router();
 
-routes.use('/brewmaster', brewmasterRoutes);
+routes.use('/brewer', brewerRouter);
 
 export default routes;
