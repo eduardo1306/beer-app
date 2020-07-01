@@ -17,7 +17,6 @@ export interface BrewerOptions {
 class CreateBrewerService {
   public async execute({ email, ...rest }: BrewerOptions): Promise<Brewer> {
     const brewerRepository = getRepository(Brewer);
-
     const findBrewer = await brewerRepository.findOne({
       where: {
         email,

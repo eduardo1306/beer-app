@@ -4,10 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
 } from 'typeorm';
-
-import Brewer from './Brewer';
 
 @Entity('beer')
 class Beer {
@@ -28,9 +25,6 @@ class Beer {
 
   @Column()
   description: string;
-
-  @ManyToOne(() => Brewer, brewer => brewer.beer)
-  brewer: Brewer;
 
   @CreateDateColumn()
   created_at: Date;

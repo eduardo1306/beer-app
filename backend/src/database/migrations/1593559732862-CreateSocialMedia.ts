@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { query } from 'express';
 
-export default class CreateSocialMedia1592360594339
+export default class CreateSocialMedia1593559732862
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -10,10 +11,13 @@ export default class CreateSocialMedia1592360594339
           {
             name: 'id',
             type: 'int',
+            isNullable: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
             isPrimary: true,
           },
           {
-            name: 'title',
+            name: 'socialMedia_url',
             type: 'varchar',
           },
         ],

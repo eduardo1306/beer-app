@@ -61,34 +61,44 @@ brewerRouter.get('/', async (request, response) => {
   return response.send(brewers);
 });
 
-brewerRouter.put('/:id/beer', async (request, response) => {
-  try {
-    const beerRepository = getRepository(Beer);
+brewerRouter.post('/:id/beer', async (request, response) => {
+  const beerRepository = getRepository(Beer);
+  const brewerRepository = getRepository(Brewer);
 
-    const {
-      title,
-      image = 'https://cdn.pixabay.com/photo/2017/06/24/23/41/beer-2439237_960_720.jpg',
-      coloring,
-      ibu,
-      description,
-    } = request.body;
+  const {
+    title,
+    coloring,
+    description,
+    ibu,
+    image = 'https://cdn.pixabay.com/photo/2017/06/24/23/41/beer-2439237_960_720.jpg',
+  } = request.body;
+  const { id } = request.params;
 
-    const { id } = request.params;
+  const brewer = await brewerRepository.find({
+    where: {
+      id,
+    },
+  });
 
-    const beer = await beerRepository.create({
-      title,
-      image,
-      coloring,
-      description,
-      ibu,
-    });
-
-    await beerRepository.save(beer);
-
-    console.log(beer);
-  } catch (err) {
-    return response.send({ message: err.message });
+  if (!brewer) {
+    throw new Error('Esse cervejeiro não existe!');
   }
+
+  const beer = await beerRepository.create({
+    title,
+    coloring,
+    ibu,
+    description,
+    image,
+  });
+
+  await beerRepository.save(beer);
+
+  await brewerRepository.update(id, {
+    beer_id: beer.id,
+  });
+
+  return response.send({ message: 'Cerveja cadastrada com sucesso! ' });
 });
 
 export default brewerRouter;

@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateRelationBeerSocialMedia1592446304981
+export default class CreateRelationBeerSocialMedia1592866534837
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
@@ -29,10 +29,10 @@ export default class CreateRelationBeerSocialMedia1592446304981
     await queryRunner.createForeignKey(
       'brewer',
       new TableForeignKey({
-        columnNames: ['socialMedia_id'],
+        columnNames: ['beer_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'socialMedia',
-        name: 'BrewerRelatedWithSocialMedia',
+        referencedTableName: 'beer',
+        name: 'BrewerRelatedWithBeer',
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       }),
@@ -41,10 +41,10 @@ export default class CreateRelationBeerSocialMedia1592446304981
     await queryRunner.createForeignKey(
       'brewer',
       new TableForeignKey({
-        columnNames: ['beer_id'],
+        columnNames: ['socialMedia_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'beer',
-        name: 'BrewerRelatedWithBeer',
+        referencedTableName: 'socialMedia',
+        name: 'BrewerRelatedWithSocialMedia',
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       }),
@@ -54,5 +54,7 @@ export default class CreateRelationBeerSocialMedia1592446304981
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('brewer', 'BrewerRelatedWithBeer');
     await queryRunner.dropForeignKey('brewer', 'BrewerRelatedWithSocialMedia');
+    await queryRunner.dropColumn('brewer', 'beer_id');
+    await queryRunner.dropColumn('brewer', 'socialMedia_id');
   }
 }

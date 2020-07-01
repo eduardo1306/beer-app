@@ -4,6 +4,8 @@ import {
   Column,
   OneToMany,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import Beer from './Beer';
@@ -41,21 +43,29 @@ class Brewer {
   @Column()
   uf: string;
 
+  @OneToMany(() => Beer, beer => beer)
+  @JoinColumn({
+    name: 'beer_id',
+  })
+  beer: Beer[];
+
+  @Column()
+  beer_id: number;
+
   @OneToMany(() => SocialMedia, socialMedia => socialMedia.brewer)
   @JoinColumn({
     name: 'socialMedia_id',
   })
   socialMedia: SocialMedia[];
 
-  @OneToMany(() => Beer, beer => beer.brewer)
-  @JoinColumn({ name: 'beer_id' })
-  beer: Beer[];
-
-  @Column()
-  beer_id: number;
-
   @Column()
   socialMedia_id: number;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 export default Brewer;

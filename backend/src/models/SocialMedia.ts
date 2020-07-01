@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 import Brewer from './Brewer';
 
@@ -8,9 +8,9 @@ class SocialMedia {
   id: number;
 
   @Column()
-  title: string;
+  socialMedia_url: string;
 
-  @ManyToOne(() => Brewer, brewer => brewer.socialMedia)
+  @ManyToOne(() => Brewer)
   brewer: Brewer;
 }
 
