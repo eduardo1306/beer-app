@@ -4,7 +4,7 @@ import beerRouter from './beer.routes';
 
 const routes = Router();
 
-routes.use('/brewer', brewerRouter);
-routes.use('/beer', beerRouter);
+routes.use('/', brewerRouter);
+routes.use('/', beerRouter);
 
 export default routes;

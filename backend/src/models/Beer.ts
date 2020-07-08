@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import Brewer from './Brewer';
 
 @Entity('beer')
 class Beer {
@@ -25,6 +28,13 @@ class Beer {
 
   @Column()
   description: string;
+
+  @ManyToOne(() => Brewer)
+  @JoinColumn({ name: 'brewer_id' })
+  brewer: Brewer;
+
+  @Column()
+  brewer_id: string;
 
   @CreateDateColumn()
   created_at: Date;

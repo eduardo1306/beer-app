@@ -66,6 +66,6 @@ export default class CreateBrewer1592861725885 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('brewer');
+    await queryRunner.dropForeignKey('brewer', 'beersByBrewer');
   }
 }

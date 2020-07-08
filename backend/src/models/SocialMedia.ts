@@ -1,6 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-
-import Brewer from './Brewer';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('socialMedia')
 class SocialMedia {
@@ -9,9 +7,6 @@ class SocialMedia {
 
   @Column()
   socialMedia_url: string;
-
-  @ManyToOne(() => Brewer)
-  brewer: Brewer;
 }
 
 export default SocialMedia;

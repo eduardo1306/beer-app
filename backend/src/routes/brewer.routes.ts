@@ -1,27 +1,29 @@
-import { Router, Response } from 'express';
+import { Router } from 'express';
 import { celebrate } from 'celebrate';
-import { getRepository } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import multer from 'multer';
 
 import multerConfig from '../config/multer';
-import celebrateConfig from '../config/celebrate';
+import { brewerCelebrateConfig } from '../config/celebrate';
+import CreateBrewerService from '../services/BrewerServices/CreateBrewerService';
+import DeleteBrewerService from '../services/BrewerServices/DeleteBrewerService';
 
-import CreateBrewerService from '../services/CreateBrewerService';
-import Brewer from '../models/Brewer';
-import Beer from '../models/Beer';
+import BrewerRepository from '../repositories/BrewerRepository';
+import BeerRepository from '../repositories/BeerRepository';
 
-const brewerService = new CreateBrewerService();
 const brewerRouter = Router();
 const upload = multer(multerConfig);
 
 brewerRouter.post(
-  '/',
+  '/brewer',
   upload.single('photo'),
-  celebrate(celebrateConfig, {
+  celebrate(brewerCelebrateConfig, {
     abortEarly: false,
   }),
-  async (request, response): Promise<Response<Brewer>> => {
+  async (request, response) => {
     try {
+      const createBrewerService = new CreateBrewerService();
+
       const {
         name,
         latitude,
@@ -34,7 +36,7 @@ brewerRouter.post(
         whatsapp,
       } = request.body;
 
-      const brewer = await brewerService.execute({
+      const brewer = await createBrewerService.execute({
         latitude,
         longitude,
         email,
@@ -53,52 +55,33 @@ brewerRouter.post(
   },
 );
 
-brewerRouter.get('/', async (request, response) => {
-  const brewerRepository = getRepository(Brewer);
-
+brewerRouter.get('/brewer', async (request, response) => {
+  const brewerRepository = getCustomRepository(BrewerRepository);
   const brewers = await brewerRepository.find();
 
   return response.send(brewers);
 });
 
-brewerRouter.post('/:id/beer', async (request, response) => {
-  const beerRepository = getRepository(Beer);
-  const brewerRepository = getRepository(Brewer);
+brewerRouter.get('/brewer/:id', async (request, response) => {
+  const brewerRepository = getCustomRepository(BrewerRepository);
+  const beerRepository = getCustomRepository(BeerRepository);
 
-  const {
-    title,
-    coloring,
-    description,
-    ibu,
-    image = 'https://cdn.pixabay.com/photo/2017/06/24/23/41/beer-2439237_960_720.jpg',
-  } = request.body;
   const { id } = request.params;
 
-  const brewer = await brewerRepository.find({
-    where: {
-      id,
-    },
-  });
+  const brewer = await brewerRepository.findOne(id);
+  const beers = await beerRepository.relatedBeers(id);
 
-  if (!brewer) {
-    throw new Error('Esse cervejeiro não existe!');
-  }
+  return response.send({ brewer, beers });
+});
 
-  const beer = await beerRepository.create({
-    title,
-    coloring,
-    ibu,
-    description,
-    image,
-  });
+brewerRouter.delete('/brewer/:id', async (request, response) => {
+  const deleteBrewerService = new DeleteBrewerService();
 
-  await beerRepository.save(beer);
+  const { id } = request.params;
 
-  await brewerRepository.update(id, {
-    beer_id: beer.id,
-  });
+  const deletedBrewer = await deleteBrewerService.execute(id);
 
-  return response.send({ message: 'Cerveja cadastrada com sucesso! ' });
+  return response.send(deletedBrewer);
 });
 
 export default brewerRouter;
