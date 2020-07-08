@@ -4,9 +4,13 @@ import { getCustomRepository } from 'typeorm';
 import multer from 'multer';
 
 import multerConfig from '../config/multer';
-import { brewerCelebrateConfig } from '../config/celebrate';
+import {
+  brewerCreateCelebrateConfig,
+  brewerUpdatePhotoCelebrateConfig,
+} from '../config/celebrate';
 import CreateBrewerService from '../services/BrewerServices/CreateBrewerService';
 import DeleteBrewerService from '../services/BrewerServices/DeleteBrewerService';
+import UpdateBrewerPhotoService from '../services/BrewerServices/UpdateBrewerPhotoService';
 
 import BrewerRepository from '../repositories/BrewerRepository';
 import BeerRepository from '../repositories/BeerRepository';
@@ -17,7 +21,7 @@ const upload = multer(multerConfig);
 brewerRouter.post(
   '/brewer',
   upload.single('photo'),
-  celebrate(brewerCelebrateConfig, {
+  celebrate(brewerCreateCelebrateConfig, {
     abortEarly: false,
   }),
   async (request, response) => {
@@ -30,11 +34,28 @@ brewerRouter.post(
         longitude,
         email,
         password,
-        photo = 'https://assets.buscacity.com.br/wp-content/uploads/2017/03/19090426/default_user.jpg',
         city,
         uf,
         whatsapp,
       } = request.body;
+      const photo = request.file;
+
+      if (!photo) {
+        const brewer = await createBrewerService.execute({
+          latitude,
+          longitude,
+          email,
+          name,
+          password,
+          photo:
+            'https://assets.buscacity.com.br/wp-content/uploads/2017/03/19090426/default_user.jpg',
+          city,
+          uf,
+          whatsapp,
+        });
+
+        return response.send(brewer);
+      }
 
       const brewer = await createBrewerService.execute({
         latitude,
@@ -42,13 +63,13 @@ brewerRouter.post(
         email,
         name,
         password,
-        photo: request.file.filename,
+        photo: photo.filename,
         city,
         uf,
         whatsapp,
       });
 
-      return response.json(brewer);
+      return response.send(brewer);
     } catch (err) {
       return response.send({ message: err.message });
     }
@@ -63,25 +84,59 @@ brewerRouter.get('/brewer', async (request, response) => {
 });
 
 brewerRouter.get('/brewer/:id', async (request, response) => {
-  const brewerRepository = getCustomRepository(BrewerRepository);
-  const beerRepository = getCustomRepository(BeerRepository);
+  try {
+    const brewerRepository = getCustomRepository(BrewerRepository);
+    const beerRepository = getCustomRepository(BeerRepository);
 
-  const { id } = request.params;
+    const { id } = request.params;
 
-  const brewer = await brewerRepository.findOne(id);
-  const beers = await beerRepository.relatedBeers(id);
+    const brewer = await brewerRepository.findOne(id);
+    const beers = await beerRepository.relatedBeers(id);
 
-  return response.send({ brewer, beers });
+    return response.send({ brewer, beers });
+  } catch (err) {
+    return response.send({ message: err.message });
+  }
 });
 
 brewerRouter.delete('/brewer/:id', async (request, response) => {
-  const deleteBrewerService = new DeleteBrewerService();
+  try {
+    const deleteBrewerService = new DeleteBrewerService();
 
-  const { id } = request.params;
+    const { id } = request.params;
 
-  const deletedBrewer = await deleteBrewerService.execute(id);
+    const deletedBrewer = await deleteBrewerService.execute(id);
 
-  return response.send(deletedBrewer);
+    return response.send(deletedBrewer);
+  } catch (err) {
+    return response.send({ message: err.message });
+  }
 });
+
+brewerRouter.put(
+  '/brewer/:id',
+  upload.single('photo'),
+  celebrate(brewerUpdatePhotoCelebrateConfig, {
+    abortEarly: false,
+  }),
+  async (request, response) => {
+    try {
+      const updateBrewerPhotoService = new UpdateBrewerPhotoService();
+      const photo = request.file.filename;
+      const { id } = request.params;
+
+      await updateBrewerPhotoService.execute({
+        id,
+        photo,
+      });
+
+      return response.send({
+        message: 'Dados cadastrais atualizados com sucesso!',
+      });
+    } catch (err) {
+      return response.send({ message: err.message });
+    }
+  },
+);
 
 export default brewerRouter;

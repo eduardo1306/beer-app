@@ -9,3 +9,8 @@ export interface BrewerCreateOptions {
   uf: string;
   whatsapp: string;
 }
+
+export interface BrewerUpdatePhotoOptions {
+  id: string;
+  photo: string;
+}

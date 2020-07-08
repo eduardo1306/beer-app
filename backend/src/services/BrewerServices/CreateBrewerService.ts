@@ -7,7 +7,14 @@ import Brewer from '../../models/Brewer';
 class CreateBrewerService {
   public async execute({
     email,
-    ...rest
+    city,
+    latitude,
+    longitude,
+    name,
+    password,
+    photo,
+    uf,
+    whatsapp,
   }: BrewerCreateOptions): Promise<Brewer> {
     const brewerRepository = getCustomRepository(BrewerRepository);
 
@@ -18,7 +25,14 @@ class CreateBrewerService {
     }
 
     const brewer = await brewerRepository.create({
-      ...rest,
+      city,
+      latitude,
+      longitude,
+      name,
+      password,
+      photo,
+      uf,
+      whatsapp,
       email,
     });
 
