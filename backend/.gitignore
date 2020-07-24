@@ -1,5 +1,4 @@
 node_modules
 ./dist
-ormconfig.json
 uploads/*
 !uploads/.gitkeep

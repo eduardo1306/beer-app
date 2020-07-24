@@ -4,7 +4,7 @@
   "main": "index.js",
   "author": "Eduardo Ferreira",
   "scripts": {
-    "dev:server": "ts-node-dev --ignore-watch node_modules --transpileOnly src/server.ts",
+    "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "license": "MIT",
@@ -22,6 +22,7 @@
     "eslint-plugin-import": "^2.21.2",
     "prettier": "^2.0.5",
     "ts-node-dev": "^1.0.0-pre.48",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.5"
   },
   "dependencies": {
