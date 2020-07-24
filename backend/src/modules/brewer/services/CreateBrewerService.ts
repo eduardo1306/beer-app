@@ -1,10 +1,16 @@
-import { getCustomRepository } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
 
 import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
-import BrewerRepository from '@modules/brewer/repositories/BrewerRepository';
+import BrewerRepository from '@modules/brewer/infra/typeorm/repository/BrewerRepository';
 import Brewer from '@modules/brewer/infra/typeorm/entities/Brewer';
 
+@injectable()
 class CreateBrewerService {
+  constructor(
+    @inject('BrewerRepository')
+    private brewerRepository: BrewerRepository,
+  ) {}
+
   public async execute({
     email,
     city,
@@ -16,15 +22,13 @@ class CreateBrewerService {
     uf,
     whatsapp,
   }: ICreateBrewerDTO): Promise<Brewer> {
-    const brewerRepository = getCustomRepository(BrewerRepository);
-
-    const findBrewer = await brewerRepository.findByEmail(email);
+    const findBrewer = await this.brewerRepository.findByEmail(email);
 
     if (findBrewer) {
       throw new Error('Esse cervejeiro já existe!');
     }
 
-    const brewer = await brewerRepository.create({
+    const brewer = await this.brewerRepository.create({
       city,
       latitude,
       longitude,
@@ -35,8 +39,6 @@ class CreateBrewerService {
       whatsapp,
       email,
     });
-
-    await brewerRepository.save(brewer);
 
     delete brewer.password;
 

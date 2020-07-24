@@ -1,9 +1,11 @@
 import 'reflect-metadata';
-import './typeorm';
 import express, { json } from 'express';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import routes from './routes';
+
+import './typeorm';
+import '@shared/container';
 
 const app = express();
 

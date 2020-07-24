@@ -1,20 +1,16 @@
-import { getCustomRepository } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
 
-import BrewerRepository from '@modules/brewer/repositories/BrewerRepository';
+import BrewerRepository from '@modules/brewer/infra/typeorm/repository/BrewerRepository';
 
+@injectable()
 class DeleteBrewerService {
-  public async execute(brewerId: string): Promise<never[]> {
-    const brewerRepository = getCustomRepository(BrewerRepository);
+  constructor(
+    @inject('BrewerRepository')
+    private brewerRepository: BrewerRepository,
+  ) {}
 
-    const brewer = await brewerRepository.findOne(brewerId);
-
-    if (!brewer) {
-      throw new Error('Esse cervejeiro não existe!');
-    }
-
-    await brewerRepository.delete(brewerId);
-
-    return [];
+  public async execute(brewerId: string): Promise<void> {
+    this.brewerRepository.findOneAndDelete(brewerId);
   }
 }
 
