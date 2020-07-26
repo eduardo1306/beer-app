@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import uploadConfig from '@config/multer';
 
-import BrewerRepository from '@modules/brewer/repositories/BrewerRepository';
+import BrewerRepository from '@modules/brewer/infra/typeorm/repository/BrewerRepository';
 import Brewer from '@modules/brewer/infra/typeorm/entities/Brewer';
 import { IUpdateBrewerPhotoDTO } from '@modules/brewer/dtos/IUpdateBrewerPhotoDTO';
 

@@ -1,10 +1,9 @@
-import { getCustomRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
 import uploadConfig from '@config/multer';
 
-import BeerRepository from '@modules/beer/repositories/BeerRepository';
+import BeerRepository from '@modules/beer/infra/typeorm/repository/BeerRepository';
 import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 import { IUpdateBeerImageDTO } from '@modules/beer/dtos/IUpdateBeerImageDTO';
 
@@ -14,14 +13,9 @@ class UpdateBeerImageService {
     id,
     image,
   }: IUpdateBeerImageDTO): Promise<Beer> {
-    const beerRepository = getCustomRepository(BeerRepository);
+    const beerRepository = new BeerRepository();
 
-    const beer = await beerRepository.findOne({
-      where: {
-        id,
-        brewer_id,
-      },
-    });
+    const beer = await beerRepository.findBeer(id, brewer_id);
 
     if (!beer) {
       throw new Error('Esse(a) cervejeiro/cerveja não existe!');
