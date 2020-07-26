@@ -11,6 +11,20 @@ export default class BrewerRepository implements IBrewerRepository {
     this.ormRepository = getRepository(Brewer);
   }
 
+  public async find(): Promise<Brewer[] | undefined> {
+    const brewers = this.ormRepository.find();
+
+    return brewers;
+  }
+
+  public async findById(id: string): Promise<Brewer | undefined> {
+    const brewer = this.ormRepository.findOne({
+      where: { id },
+    });
+
+    return brewer;
+  }
+
   public async findOneAndDelete(brewer_id: string): Promise<never[]> {
     const brewer = await this.ormRepository.findOne(brewer_id);
 
