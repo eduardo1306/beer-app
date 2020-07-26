@@ -19,4 +19,10 @@ export default class BeerRepository implements IBeerRepository {
 
     return relatedBeer;
   }
+
+  public async find(): Promise<Beer[] | undefined> {
+    const beers = this.ormRepository.find();
+
+    return beers;
+  }
 }
