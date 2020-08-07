@@ -11,6 +11,10 @@ export default class BeerRepository implements IBeerRepository {
     this.ormRepository = getRepository(Beer);
   }
 
+  save(beer: Beer): Promise<Beer> {
+    return this.ormRepository.save(beer);
+  }
+
   public async findBeer(
     beer_id: number,
     brewer_id: string,
@@ -65,6 +69,7 @@ export default class BeerRepository implements IBeerRepository {
     const beer = await this.ormRepository.create(beerData);
 
     await this.ormRepository.save(beer);
+
     return beer;
   }
 }

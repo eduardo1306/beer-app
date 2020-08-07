@@ -1,11 +1,19 @@
-import { getCustomRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 
 import { ICreateBeerDTO } from '@modules/beer/dtos/ICreateBeerDTO';
-import BrewerRepository from '@modules/brewer/infra/typeorm/repository/BrewerRepository';
-import BeerRepository from '@modules/beer/infra/typeorm/repository/BeerRepository';
+import IBrewerRepository from '@modules/brewer/repositories/IBrewerRepository';
+import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
 import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 
+@injectable()
 class CreateBeerService {
+  constructor(
+    @inject('BeerRepository')
+    private beerRepository: IBeerRepository,
+    @inject('BrewerRepository')
+    private brewerRepository: IBrewerRepository,
+  ) {}
+
   public async execute({
     coloring,
     description,
@@ -14,16 +22,13 @@ class CreateBeerService {
     title,
     brewer_id,
   }: ICreateBeerDTO): Promise<Beer> {
-    const beerRepository = getCustomRepository(BeerRepository);
-    const brewerRepository = getCustomRepository(BrewerRepository);
-
-    const brewer = await brewerRepository.findById(brewer_id);
+    const brewer = await this.brewerRepository.findById(brewer_id);
 
     if (!brewer || brewer === null) {
       throw new Error('Esse cervejeiro não existe!');
     }
 
-    const beer = await beerRepository.create({
+    const beer = await this.beerRepository.create({
       coloring,
       description,
       ibu,

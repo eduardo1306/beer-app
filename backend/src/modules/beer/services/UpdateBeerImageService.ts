@@ -1,21 +1,26 @@
+import { injectable, inject } from 'tsyringe';
 import path from 'path';
 import fs from 'fs';
 
 import uploadConfig from '@config/multer';
 
-import BeerRepository from '@modules/beer/infra/typeorm/repository/BeerRepository';
-import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 import { IUpdateBeerImageDTO } from '@modules/beer/dtos/IUpdateBeerImageDTO';
+import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
+import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 
+@injectable()
 class UpdateBeerImageService {
+  constructor(
+    @inject('BeerRepository')
+    private beerRepository: IBeerRepository,
+  ) {}
+
   public async execute({
     brewer_id,
     id,
     image,
   }: IUpdateBeerImageDTO): Promise<Beer> {
-    const beerRepository = new BeerRepository();
-
-    const beer = await beerRepository.findBeer(id, brewer_id);
+    const beer = await this.beerRepository.findBeer(id, brewer_id);
 
     if (!beer) {
       throw new Error('Esse(a) cervejeiro/cerveja não existe!');
@@ -30,9 +35,9 @@ class UpdateBeerImageService {
       }
     }
 
-    await beerRepository.update(id, {
-      image,
-    });
+    beer.image = image;
+
+    await this.beerRepository.save(beer);
 
     return beer;
   }

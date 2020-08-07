@@ -7,4 +7,5 @@ export default interface IBrewerRepository {
   findOneAndDelete(brewer_id: string): Promise<never[]>;
   findById(id: string): Promise<Brewer | undefined>;
   find(): Promise<Brewer[] | undefined>;
+  save(brewer: Brewer): Promise<Brewer>;
 }

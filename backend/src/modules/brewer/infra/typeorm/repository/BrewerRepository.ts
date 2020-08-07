@@ -11,6 +11,10 @@ export default class BrewerRepository implements IBrewerRepository {
     this.ormRepository = getRepository(Brewer);
   }
 
+  public async save(brewer: Brewer): Promise<Brewer> {
+    return this.ormRepository.save(brewer);
+  }
+
   public async find(): Promise<Brewer[] | undefined> {
     const brewers = this.ormRepository.find();
 

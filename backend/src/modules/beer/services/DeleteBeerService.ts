@@ -1,13 +1,17 @@
-import { getCustomRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 
 import { IDeleteBeerDTO } from '@modules/beer/dtos/IDeleteBeerDTO';
-import BeerRepository from '@modules/beer/infra/typeorm/repository/BeerRepository';
+import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
 
+@injectable()
 class DeleteBeerService {
-  public async execute({ brewer_id, beer_id }: IDeleteBeerDTO): Promise<[]> {
-    const beerRepository = getCustomRepository(BeerRepository);
+  constructor(
+    @inject('BeerRepository')
+    private beerRepository: IBeerRepository,
+  ) {}
 
-    await beerRepository.findOneAndDelete(beer_id, brewer_id);
+  public async execute({ brewer_id, beer_id }: IDeleteBeerDTO): Promise<[]> {
+    await this.beerRepository.findOneAndDelete(beer_id, brewer_id);
 
     return [];
   }

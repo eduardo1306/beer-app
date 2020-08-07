@@ -12,9 +12,7 @@ class UpdateBrewerPhotoService {
   public async execute({ photo, id }: IUpdateBrewerPhotoDTO): Promise<Brewer> {
     const brewerRepository = getCustomRepository(BrewerRepository);
 
-    const brewer = await brewerRepository.findOne({
-      where: { id },
-    });
+    const brewer = await brewerRepository.findById(id);
 
     if (!brewer) {
       throw new Error('Esse cervejeiro não existe!');
@@ -32,9 +30,9 @@ class UpdateBrewerPhotoService {
       }
     }
 
-    await brewerRepository.update(id, {
-      photo,
-    });
+    brewer.photo = photo;
+
+    await brewerRepository.save(brewer);
 
     return brewer;
   }
