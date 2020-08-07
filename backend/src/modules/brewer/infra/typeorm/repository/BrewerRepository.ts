@@ -18,6 +18,10 @@ export default class BrewerRepository implements IBrewerRepository {
   public async find(): Promise<Brewer[] | undefined> {
     const brewers = this.ormRepository.find();
 
+    if (!brewers) {
+      return [];
+    }
+
     return brewers;
   }
 

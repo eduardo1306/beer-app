@@ -1,3 +1,4 @@
+import { container } from 'tsyringe';
 import { Response, Request } from 'express';
 
 import UpdateBeerImageService from '@modules/beer/services/UpdateBeerImageService';
@@ -7,7 +8,7 @@ export default class BeersUpdateAvatarController {
     response: Response,
     request: Request,
   ): Promise<Response<string>> {
-    const updateBeerImageService = new UpdateBeerImageService();
+    const updateBeerImageService = container.resolve(UpdateBeerImageService);
 
     const stringifyParams = JSON.stringify(request.query);
     const parsedParams = JSON.parse(stringifyParams);

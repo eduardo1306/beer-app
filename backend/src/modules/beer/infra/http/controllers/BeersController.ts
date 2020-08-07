@@ -1,3 +1,4 @@
+import { container } from 'tsyringe';
 import { Response, Request } from 'express';
 
 import CreateBeerService from '@modules/beer/services/CreateBeerService';
@@ -11,7 +12,7 @@ export default class BeersController {
     response: Response,
     request: Request,
   ): Promise<Response<Beer>> {
-    const beerRepository = new BeerRepository();
+    const beerRepository = container.resolve(BeerRepository);
     const beers = await beerRepository.find();
 
     return response.send(beers);
@@ -21,14 +22,14 @@ export default class BeersController {
     request: Request,
     response: Response,
   ): Promise<Response<Beer>> {
-    const beerService = new CreateBeerService();
+    const beerCreateService = container.resolve(CreateBeerService);
 
     const { title, coloring, description, ibu }: Beer = request.body;
     const { id } = request.params;
     const image = request.file;
 
     if (!image) {
-      const beer = await beerService.execute({
+      const beer = await beerCreateService.execute({
         title,
         coloring,
         description,
@@ -41,7 +42,7 @@ export default class BeersController {
       return response.send(beer);
     }
 
-    const beer = await beerService.execute({
+    const beer = await beerCreateService.execute({
       title,
       coloring,
       description,
@@ -57,7 +58,7 @@ export default class BeersController {
     response: Response,
     request: Request,
   ): Promise<Response<never[]>> {
-    const deleteBeerService = new DeleteBeerService();
+    const deleteBeerService = container.resolve(DeleteBeerService);
 
     const stringifyParams = JSON.stringify(request.query);
     const parsedParams = JSON.parse(stringifyParams);
