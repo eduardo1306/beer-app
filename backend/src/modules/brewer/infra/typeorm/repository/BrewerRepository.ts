@@ -12,11 +12,13 @@ export default class BrewerRepository implements IBrewerRepository {
   }
 
   public async save(brewer: Brewer): Promise<Brewer> {
-    return this.ormRepository.save(brewer);
+    await this.ormRepository.save(brewer);
+
+    return brewer;
   }
 
   public async find(): Promise<Brewer[] | undefined> {
-    const brewers = this.ormRepository.find();
+    const brewers = await this.ormRepository.find();
 
     if (!brewers) {
       return [];
@@ -26,7 +28,7 @@ export default class BrewerRepository implements IBrewerRepository {
   }
 
   public async findById(id: string): Promise<Brewer | undefined> {
-    const brewer = this.ormRepository.findOne({
+    const brewer = await this.ormRepository.findOne({
       where: { id },
     });
 
@@ -45,7 +47,7 @@ export default class BrewerRepository implements IBrewerRepository {
   }
 
   public async create(brewerData: ICreateBrewerDTO): Promise<Brewer> {
-    const brewer = this.ormRepository.create(brewerData);
+    const brewer = await this.ormRepository.create(brewerData);
 
     await this.ormRepository.save(brewer);
 

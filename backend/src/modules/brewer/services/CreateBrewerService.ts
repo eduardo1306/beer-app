@@ -1,49 +1,31 @@
 import { inject, injectable } from 'tsyringe';
+import IBrewerRepository from '../repositories/IBrewerRepository';
 
-import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
-import BrewerRepository from '@modules/brewer/infra/typeorm/repository/BrewerRepository';
-import Brewer from '@modules/brewer/infra/typeorm/entities/Brewer';
+import { ICreateBrewerDTO } from '../dtos/ICreateBrewerDTO';
+import Brewer from '../infra/typeorm/entities/Brewer';
 
 @injectable()
-class CreateBrewerService {
+export default class CreateBrewerService {
   constructor(
     @inject('BrewerRepository')
-    private brewerRepository: BrewerRepository,
+    private brewerRepository: IBrewerRepository,
   ) {}
 
   public async execute({
     email,
-    city,
-    latitude,
-    longitude,
-    name,
-    password,
-    photo,
-    uf,
-    whatsapp,
+    ...brewerData
   }: ICreateBrewerDTO): Promise<Brewer> {
-    const findBrewer = await this.brewerRepository.findByEmail(email);
+    const checkBrewerExists = await this.brewerRepository.findByEmail(email);
 
-    if (findBrewer) {
-      throw new Error('Esse cervejeiro já existe!');
+    if (checkBrewerExists) {
+      throw new Error('Brewer already exists');
     }
 
     const brewer = await this.brewerRepository.create({
-      city,
-      latitude,
-      longitude,
-      name,
-      password,
-      photo,
-      uf,
-      whatsapp,
+      ...brewerData,
       email,
     });
-
-    delete brewer.password;
 
     return brewer;
   }
 }
-
-export default CreateBrewerService;

@@ -2,7 +2,6 @@ import { getRepository, Repository } from 'typeorm';
 
 import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
-import { ICreateBeerDTO } from '@modules/beer/dtos/ICreateBeerDTO';
 
 export default class BeerRepository implements IBeerRepository {
   private ormRepository: Repository<Beer>;
