@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import AppError from '@shared/error/AppError';
 import IBrewerRepository from '../repositories/IBrewerRepository';
 
 import { ICreateBrewerDTO } from '../dtos/ICreateBrewerDTO';
@@ -18,7 +19,7 @@ export default class CreateBrewerService {
     const checkBrewerExists = await this.brewerRepository.findByEmail(email);
 
     if (checkBrewerExists) {
-      throw new Error('Brewer already exists');
+      throw new AppError('Esse cervejeiro já existe!');
     }
 
     const brewer = await this.brewerRepository.create({

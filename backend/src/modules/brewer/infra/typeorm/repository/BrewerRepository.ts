@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import Brewer from '@modules/brewer/infra/typeorm/entities/Brewer';
 import IBrewerRepository from '@modules/brewer/repositories/IBrewerRepository';
 import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
+import AppError from '@shared/error/AppError';
 
 export default class BrewerRepository implements IBrewerRepository {
   private ormRepository: Repository<Brewer>;
@@ -39,7 +40,7 @@ export default class BrewerRepository implements IBrewerRepository {
     const brewer = await this.ormRepository.findOne(brewer_id);
 
     if (!brewer) {
-      throw new Error('Esse cervejeiro não existe!');
+      throw new AppError('Esse cervejeiro não existe!');
     }
 
     await this.ormRepository.delete(brewer);

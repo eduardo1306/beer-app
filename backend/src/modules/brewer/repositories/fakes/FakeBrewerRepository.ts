@@ -1,20 +1,20 @@
+import { uuid } from 'uuidv4';
 import Brewer from '@modules/brewer/infra/typeorm/entities/Brewer';
 import IBrewerRepository from '@modules/brewer/repositories/IBrewerRepository';
 import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
+import AppError from '@shared/error/AppError';
 
 export default class FakeBrewerRepository implements IBrewerRepository {
-  private brewers: Brewer[];
+  private brewers: Brewer[] = [];
 
   public async findByEmail(email: string): Promise<Brewer | undefined> {
-    const findBrewer = this.brewers.find(brewer => brewer.email === email);
-
-    return findBrewer;
+    return this.brewers.find(brewer => brewer.email === email);
   }
 
   public async create(brewerData: ICreateBrewerDTO): Promise<Brewer> {
     const brewer = new Brewer();
 
-    Object.assign(brewer, brewerData);
+    Object.assign(brewer, { ...brewerData, id: uuid() });
 
     this.brewers.push(brewer);
 
@@ -39,7 +39,7 @@ export default class FakeBrewerRepository implements IBrewerRepository {
     const findBrewer = this.brewers.find(brwr => brwr.id === brewer.id);
 
     if (findBrewer) {
-      throw new Error('Brewer already exists');
+      throw new AppError('Esse cervejeiro já existe');
     }
 
     this.brewers.push(brewer);

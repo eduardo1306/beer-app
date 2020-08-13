@@ -2,6 +2,7 @@ import { getRepository, Repository } from 'typeorm';
 
 import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
+import AppError from '@shared/error/AppError';
 
 export default class BeerRepository implements IBeerRepository {
   private ormRepository: Repository<Beer>;
@@ -40,7 +41,7 @@ export default class BeerRepository implements IBeerRepository {
     });
 
     if (!beer) {
-      throw new Error('Essa cerveja/cervejeiro não existe!');
+      throw new AppError('Essa cerveja/cervejeiro não existe!');
     }
 
     await this.ormRepository.delete(beer_id);
