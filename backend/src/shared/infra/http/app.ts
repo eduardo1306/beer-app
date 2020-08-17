@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import './typeorm';
+import '../typeorm';
 import '@shared/container';
 
 import express, { json } from 'express';

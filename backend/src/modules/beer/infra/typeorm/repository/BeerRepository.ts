@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import Beer from '@modules/beer/infra/typeorm/entities/Beer';
 import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
 import AppError from '@shared/error/AppError';
+import ICreateBeerDTO from '@modules/beer/dtos/ICreateBeerDTO';
 
 export default class BeerRepository implements IBeerRepository {
   private ormRepository: Repository<Beer>;
@@ -59,7 +60,7 @@ export default class BeerRepository implements IBeerRepository {
     return relatedBeer;
   }
 
-  public async find(): Promise<Beer[] | undefined> {
+  public async index(): Promise<Beer[] | undefined> {
     const beers = this.ormRepository.find();
 
     return beers;

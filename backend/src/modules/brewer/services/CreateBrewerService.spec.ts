@@ -17,7 +17,6 @@ describe('CreateBrewerService', () => {
       longitude: -40.3657492,
       name: 'John Doe',
       password: '123456',
-      photo: 'photo.jpeg',
       uf: 'ES',
       whatsapp: '2712345678901',
     });
@@ -32,7 +31,6 @@ describe('CreateBrewerService', () => {
       longitude: -40.3657492,
       name: 'John Doe',
       password: '123456',
-      photo: 'photo.jpeg',
       uf: 'ES',
       whatsapp: '2712345678901',
     });
@@ -45,7 +43,6 @@ describe('CreateBrewerService', () => {
         longitude: -40.3657492,
         name: 'John Doe',
         password: '123456',
-        photo: 'photo.jpeg',
         uf: 'ES',
         whatsapp: '2712345678901',
       }),
