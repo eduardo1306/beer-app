@@ -59,11 +59,15 @@ export default class BrewerRepository implements IBrewerRepository {
     return brewer;
   }
 
-  public async findByEmail(email: string): Promise<Brewer | undefined> {
-    const findBrewer = await this.ormRepository.findOne({
+  public async findByEmail(email: string): Promise<Brewer> {
+    const brewer = await this.ormRepository.findOne({
       where: { email },
     });
 
-    return findBrewer;
+    if (!brewer) {
+      throw new AppError('Cervejeiro não encontrado!');
+    }
+
+    return brewer;
   }
 }

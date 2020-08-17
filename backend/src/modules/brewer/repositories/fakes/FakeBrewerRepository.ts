@@ -7,8 +7,14 @@ import AppError from '@shared/error/AppError';
 export default class FakeBrewerRepository implements IBrewerRepository {
   private brewers: Brewer[] = [];
 
-  public async findByEmail(email: string): Promise<Brewer | undefined> {
-    return this.brewers.find(brewer => brewer.email === email);
+  public async findByEmail(email: string): Promise<Brewer> {
+    const brewer = this.brewers.find(item => item.email === email);
+
+    if (!brewer) {
+      throw new AppError('Esse cervejeiro não existe!');
+    }
+
+    return brewer;
   }
 
   public async create(brewerData: ICreateBrewerDTO): Promise<Brewer> {
