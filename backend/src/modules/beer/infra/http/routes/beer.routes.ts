@@ -12,6 +12,6 @@ beerRouter.post(
   celebrate(beerCreateCelebrateConfig),
   beerController.create,
 );
-beerRouter.get('/', beerController.index);
+beerRouter.get('/:id', beerController.index);
 
 export default beerRouter;

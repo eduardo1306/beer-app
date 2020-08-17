@@ -20,6 +20,7 @@ export default class CreateBeer1592861833948 implements MigrationInterface {
           {
             name: 'image',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'coloring',

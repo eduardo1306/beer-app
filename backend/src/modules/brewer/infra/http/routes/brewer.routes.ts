@@ -13,4 +13,6 @@ brewerRouter.post(
   brewerController.create,
 );
 
+brewerRouter.get('/', brewerController.index);
+
 export default brewerRouter;

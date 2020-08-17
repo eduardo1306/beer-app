@@ -12,7 +12,7 @@ export default class BeerController {
   ): Promise<Response<Beer>> {
     const { title, coloring, ibu, description } = request.body;
 
-    const { brewer_id } = request.params;
+    const { id } = request.params;
 
     const createBeer = container.resolve(CreateBeerService);
 
@@ -21,7 +21,7 @@ export default class BeerController {
       coloring,
       description,
       ibu,
-      brewer_id,
+      brewer_id: id,
     });
 
     return response.json(beer);
