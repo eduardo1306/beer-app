@@ -53,7 +53,13 @@ export default class FakeBrewerRepository implements IBrewerRepository {
     return brewer;
   }
 
-  public async findById(id: string): Promise<Brewer | undefined> {
-    return this.brewers.find(brewer => brewer.id === id);
+  public async findById(id: string): Promise<Brewer> {
+    const brewer = this.brewers.find(item => item.id === id);
+
+    if (!brewer) {
+      throw new AppError('Esse cervejeiro já existe');
+    }
+
+    return brewer;
   }
 }
