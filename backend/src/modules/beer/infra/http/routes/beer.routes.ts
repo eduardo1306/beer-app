@@ -4,14 +4,14 @@ import { celebrate } from 'celebrate';
 import { beerCreateCelebrateConfig } from '@config/celebrate';
 import BeerController from '../controllers/BeerController';
 
-const brewerRouter = Router();
+const beerRouter = Router();
 const beerController = new BeerController();
 
-brewerRouter.post(
+beerRouter.post(
   '/:id',
   celebrate(beerCreateCelebrateConfig),
   beerController.create,
 );
-brewerRouter.get('/:id', beerController.index);
+beerRouter.get('/', beerController.index);
 
-export default brewerRouter;
+export default beerRouter;
