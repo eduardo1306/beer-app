@@ -28,10 +28,14 @@ export default class BrewerRepository implements IBrewerRepository {
     return brewers;
   }
 
-  public async findById(id: string): Promise<Brewer | undefined> {
+  public async findById(id: string): Promise<Brewer> {
     const brewer = await this.ormRepository.findOne({
       where: { id },
     });
+
+    if (!brewer) {
+      throw new AppError('Cervejeiro não encontrado');
+    }
 
     return brewer;
   }

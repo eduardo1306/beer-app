@@ -45,14 +45,11 @@ export default class BrewerController {
     request: Request,
     response: Response,
   ): Promise<Response<Brewer[]>> {
+    const { id } = request.params;
     const brewerRepository = container.resolve(BrewerRepository);
 
-    const brewers = await brewerRepository.find();
+    const brewer = await brewerRepository.findById(id);
 
-    if (!brewers) {
-      return response.json([]);
-    }
-
-    return response.json(brewers);
+    return response.json(brewer);
   }
 }
