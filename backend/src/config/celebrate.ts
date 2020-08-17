@@ -10,19 +10,6 @@ export const brewerCreateCelebrateConfig = {
     city: Joi.string().required(),
     uf: Joi.string().max(2).required(),
     whatsapp: Joi.number().required(),
-    photo: Joi.string(),
-  }),
-};
-
-export const brewerUpdatePhotoCelebrateConfig = {
-  body: Joi.object().keys({
-    photo: Joi.string(),
-  }),
-};
-
-export const beerUpdatePhotoCelebrateConfig = {
-  body: Joi.object().keys({
-    image: Joi.string(),
   }),
 };
 
@@ -32,6 +19,5 @@ export const beerCreateCelebrateConfig = {
     coloring: Joi.string().max(20).required(),
     ibu: Joi.string().max(20).required(),
     description: Joi.string().max(450).required(),
-    image: Joi.string(),
   }),
 };

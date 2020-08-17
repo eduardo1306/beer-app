@@ -3,4 +3,5 @@ export default interface ICreateBeerDTO {
   coloring: string;
   ibu: string;
   description: string;
+  brewer_id: string;
 }

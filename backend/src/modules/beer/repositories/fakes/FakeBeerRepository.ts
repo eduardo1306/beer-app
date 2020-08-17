@@ -40,10 +40,22 @@ export default class FakeBeerRepository implements IBeerRepository {
     return beer;
   }
 
-  public async create(beerData: ICreateBeerDTO): Promise<Beer> {
+  public async create({
+    coloring,
+    description,
+    ibu,
+    title,
+  }: ICreateBeerDTO): Promise<Beer> {
     const beer = new Beer();
 
-    Object.assign(beer, { ...beerData, id: uuid() });
+    Object.assign(beer, {
+      coloring,
+      description,
+      ibu,
+      title,
+      brewer_id: uuid(),
+      id: uuid(),
+    });
 
     this.beers.push(beer);
 

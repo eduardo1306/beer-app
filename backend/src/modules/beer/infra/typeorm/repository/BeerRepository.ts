@@ -57,13 +57,11 @@ export default class BeerRepository implements IBeerRepository {
       },
     });
 
+    if (!relatedBeer) {
+      throw new AppError('Esse cervejeiro não existe');
+    }
+
     return relatedBeer;
-  }
-
-  public async index(): Promise<Beer[] | undefined> {
-    const beers = this.ormRepository.find();
-
-    return beers;
   }
 
   public async create(beerData: ICreateBeerDTO): Promise<Beer> {

@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
 import CreateBrewerService from '@modules/brewer/services/CreateBrewerService';
+
 import Brewer from '../../typeorm/entities/Brewer';
+import BrewerRepository from '../../typeorm/repository/BrewerRepository';
 
 export default class BrewerController {
   public async create(
@@ -37,5 +39,20 @@ export default class BrewerController {
     delete brewer.password;
 
     return response.json(brewer);
+  }
+
+  public async index(
+    request: Request,
+    response: Response,
+  ): Promise<Response<Brewer[]>> {
+    const brewerRepository = container.resolve(BrewerRepository);
+
+    const brewers = await brewerRepository.find();
+
+    if (!brewers) {
+      return response.json([]);
+    }
+
+    return response.json(brewers);
   }
 }

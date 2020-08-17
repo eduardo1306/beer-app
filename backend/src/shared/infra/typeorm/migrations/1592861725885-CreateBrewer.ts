@@ -28,6 +28,7 @@ export default class CreateBrewer1592861725885 implements MigrationInterface {
           {
             name: 'photo',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'city',
