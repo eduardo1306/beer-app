@@ -1,11 +1,13 @@
 import { container } from 'tsyringe';
 import { Request, Response } from 'express';
 
-import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
 import CreateBrewerService from '@modules/brewer/services/CreateBrewerService';
+import DeleteBrewerService from '@modules/brewer/services/DeleteBrewerService';
+
+import { ICreateBrewerDTO } from '@modules/brewer/dtos/ICreateBrewerDTO';
+import BrewerRepository from '../../typeorm/repository/BrewerRepository';
 
 import Brewer from '../../typeorm/entities/Brewer';
-import BrewerRepository from '../../typeorm/repository/BrewerRepository';
 
 export default class BrewerController {
   public async create(
@@ -22,23 +24,26 @@ export default class BrewerController {
       uf,
       whatsapp,
     }: ICreateBrewerDTO = request.body;
+    try {
+      const createBrewer = container.resolve(CreateBrewerService);
 
-    const createBrewer = container.resolve(CreateBrewerService);
+      const brewer = await createBrewer.execute({
+        city,
+        email,
+        latitude,
+        longitude,
+        name,
+        password,
+        uf,
+        whatsapp,
+      });
 
-    const brewer = await createBrewer.execute({
-      city,
-      email,
-      latitude,
-      longitude,
-      name,
-      password,
-      uf,
-      whatsapp,
-    });
+      delete brewer.password;
 
-    delete brewer.password;
-
-    return response.json(brewer);
+      return response.json(brewer);
+    } catch (err) {
+      return response.json({ message: err.message });
+    }
   }
 
   public async index(
@@ -47,8 +52,22 @@ export default class BrewerController {
   ): Promise<Response<Brewer[]>> {
     const brewerRepository = container.resolve(BrewerRepository);
 
-    const brewer = await brewerRepository.find();
+    const brewers = await brewerRepository.find();
 
-    return response.json(brewer);
+    return response.json(brewers);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    try {
+      const { id } = request.params;
+
+      const deleteBrewer = container.resolve(DeleteBrewerService);
+
+      await deleteBrewer.execute(id);
+
+      return response.sendStatus(204);
+    } catch (err) {
+      return response.json({ message: err.message });
+    }
   }
 }

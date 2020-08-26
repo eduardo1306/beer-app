@@ -16,14 +16,26 @@ export default class CreateBeerService {
     private brewerRepository: IBrewerRepository,
   ) {}
 
-  public async execute(beerData: ICreateBeerDTO): Promise<Beer> {
-    const brewer = await this.brewerRepository.findById(beerData.brewer_id);
+  public async execute({
+    brewer_id,
+    coloring,
+    description,
+    ibu,
+    title,
+  }: ICreateBeerDTO): Promise<Beer> {
+    const brewer = await this.brewerRepository.findById(brewer_id);
 
     if (!brewer) {
       throw new AppError('Esse cervejeiro não existe!');
     }
 
-    const beer = await this.beerRepository.create(beerData);
+    const beer = await this.beerRepository.create({
+      brewer_id,
+      coloring,
+      description,
+      ibu,
+      title,
+    });
 
     return beer;
   }

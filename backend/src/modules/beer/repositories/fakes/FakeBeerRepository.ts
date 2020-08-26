@@ -6,17 +6,12 @@ import IBeerRepository from '../IBeerRepository';
 export default class FakeBeerRepository implements IBeerRepository {
   private beers: Beer[] = [];
 
-  public async findOneAndDelete(
-    beer_id: number,
-    brewer_id: string,
-  ): Promise<[]> {
+  public async delete(beer_id: string, brewer_id: string): Promise<void> {
     const beerIndex = this.beers.findIndex(
       beer => beer.id === beer_id && beer.brewer_id === brewer_id,
     );
 
     this.beers.splice(beerIndex, 1);
-
-    return [];
   }
 
   public async relatedBeers(brewer_id: string): Promise<Beer[] | undefined> {
@@ -30,7 +25,7 @@ export default class FakeBeerRepository implements IBeerRepository {
   }
 
   public async findBeer(
-    beer_id: number,
+    beer_id: string,
     brewer_id: string,
   ): Promise<Beer | undefined> {
     const beer = this.beers.find(
@@ -45,6 +40,7 @@ export default class FakeBeerRepository implements IBeerRepository {
     description,
     ibu,
     title,
+    brewer_id,
   }: ICreateBeerDTO): Promise<Beer> {
     const beer = new Beer();
 
@@ -53,7 +49,7 @@ export default class FakeBeerRepository implements IBeerRepository {
       description,
       ibu,
       title,
-      brewer_id: uuid(),
+      brewer_id,
       id: uuid(),
     });
 

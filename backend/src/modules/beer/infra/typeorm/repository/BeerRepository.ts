@@ -17,7 +17,7 @@ export default class BeerRepository implements IBeerRepository {
   }
 
   public async findBeer(
-    beer_id: number,
+    beer_id: string,
     brewer_id: string,
   ): Promise<Beer | undefined> {
     const beer = await this.ormRepository.findOne({
@@ -30,10 +30,7 @@ export default class BeerRepository implements IBeerRepository {
     return beer;
   }
 
-  public async findOneAndDelete(
-    beer_id: number,
-    brewer_id: string,
-  ): Promise<[]> {
+  public async delete(beer_id: string, brewer_id: string): Promise<void> {
     const beer = await this.ormRepository.find({
       where: {
         brewer_id,
@@ -46,8 +43,6 @@ export default class BeerRepository implements IBeerRepository {
     }
 
     await this.ormRepository.delete(beer_id);
-
-    return [];
   }
 
   public async relatedBeers(brewer_id: string): Promise<Beer[] | undefined> {

@@ -22,7 +22,7 @@ export default class CreateRelationBeerSocialMedia1594167600838
         columnNames: ['brewer_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'brewer',
-        name: 'beersByBrewer',
+        name: 'BeersByBrewer',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
@@ -31,6 +31,6 @@ export default class CreateRelationBeerSocialMedia1594167600838
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropColumn('brewer', 'beer_id');
-    await queryRunner.dropForeignKey('brewer', 'beersByBrewer');
+    await queryRunner.dropForeignKey('brewer', 'BeersByBrewer');
   }
 }

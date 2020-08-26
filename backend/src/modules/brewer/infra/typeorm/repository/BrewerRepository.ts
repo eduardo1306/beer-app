@@ -18,7 +18,7 @@ export default class BrewerRepository implements IBrewerRepository {
     return brewer;
   }
 
-  public async find(): Promise<Brewer[] | undefined> {
+  public async find(): Promise<Brewer[] | []> {
     const brewers = await this.ormRepository.find();
 
     if (!brewers) {
@@ -28,45 +28,56 @@ export default class BrewerRepository implements IBrewerRepository {
     return brewers;
   }
 
-  public async findById(id: string): Promise<Brewer> {
+  public async findById(id: string): Promise<Brewer | undefined> {
     const brewer = await this.ormRepository.findOne({
       where: { id },
     });
 
-    if (!brewer) {
-      throw new AppError('Cervejeiro não encontrado');
-    }
-
     return brewer;
   }
 
-  public async findOneAndDelete(brewer_id: string): Promise<never[]> {
-    const brewer = await this.ormRepository.findOne(brewer_id);
+  public async delete(brewer_id: string): Promise<void> {
+    const brewer = await this.findById(brewer_id);
 
     if (!brewer) {
       throw new AppError('Esse cervejeiro não existe!');
     }
 
-    await this.ormRepository.delete(brewer);
-    return [];
+    await this.ormRepository.delete({
+      id: brewer.id,
+    });
   }
 
-  public async create(brewerData: ICreateBrewerDTO): Promise<Brewer> {
-    const brewer = await this.ormRepository.create(brewerData);
+  public async create({
+    city,
+    email,
+    latitude,
+    longitude,
+    name,
+    password,
+    uf,
+    whatsapp,
+  }: ICreateBrewerDTO): Promise<Brewer> {
+    const brewer = await this.ormRepository.create({
+      city,
+      email,
+      latitude,
+      longitude,
+      name,
+      password,
+      uf,
+      whatsapp,
+    });
 
     await this.ormRepository.save(brewer);
 
     return brewer;
   }
 
-  public async findByEmail(email: string): Promise<Brewer> {
+  public async findByEmail(email: string): Promise<Brewer | undefined> {
     const brewer = await this.ormRepository.findOne({
       where: { email },
     });
-
-    if (!brewer) {
-      throw new AppError('Cervejeiro não encontrado!');
-    }
 
     return brewer;
   }

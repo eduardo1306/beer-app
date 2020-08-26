@@ -11,8 +11,8 @@ import Brewer from '@modules/brewer/infra/typeorm/entities/Brewer';
 
 @Entity('beer')
 class Beer {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   title: string;

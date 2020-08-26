@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateBeerService from '@modules/beer/services/CreateBeerService';
+import DeleteBeerService from '@modules/beer/services/DeleteBeerService';
 import Beer from '../../typeorm/entities/Beer';
 import BeerRepository from '../../typeorm/repository/BeerRepository';
 
@@ -12,7 +13,7 @@ export default class BeerController {
   ): Promise<Response<Beer>> {
     const { title, coloring, ibu, description } = request.body;
 
-    const { id } = request.params;
+    const { brewer_id } = request.params;
 
     const createBeer = container.resolve(CreateBeerService);
 
@@ -21,7 +22,7 @@ export default class BeerController {
       coloring,
       description,
       ibu,
-      brewer_id: id,
+      brewer_id,
     });
 
     return response.json(beer);
@@ -38,5 +39,16 @@ export default class BeerController {
     const beers = await beerRepository.relatedBeers(brewer_id);
 
     return response.json(beers);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const { brewer_id } = request.params;
+    const { beer_id } = request.body;
+
+    const deleteBeer = container.resolve(DeleteBeerService);
+
+    await deleteBeer.execute({ brewer_id, beer_id });
+
+    return response.json({ message: 'Cerveja deletada com sucesso' });
   }
 }

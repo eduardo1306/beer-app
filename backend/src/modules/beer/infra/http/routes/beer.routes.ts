@@ -8,10 +8,13 @@ const beerRouter = Router();
 const beerController = new BeerController();
 
 beerRouter.post(
-  '/:id',
+  '/:brewer_id',
   celebrate(beerCreateCelebrateConfig),
   beerController.create,
 );
-beerRouter.get('/:id', beerController.index);
+
+beerRouter.get('/:brewer_id', beerController.index);
+
+beerRouter.delete('/:brewer_id', beerController.delete);
 
 export default beerRouter;

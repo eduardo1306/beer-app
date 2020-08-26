@@ -15,4 +15,6 @@ brewerRouter.post(
 
 brewerRouter.get('/', brewerController.index);
 
+brewerRouter.delete('/:id', brewerController.delete);
+
 export default brewerRouter;

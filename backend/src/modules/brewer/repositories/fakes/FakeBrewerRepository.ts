@@ -7,12 +7,8 @@ import AppError from '@shared/error/AppError';
 export default class FakeBrewerRepository implements IBrewerRepository {
   private brewers: Brewer[] = [];
 
-  public async findByEmail(email: string): Promise<Brewer> {
+  public async findByEmail(email: string): Promise<Brewer | undefined> {
     const brewer = this.brewers.find(item => item.email === email);
-
-    if (!brewer) {
-      throw new AppError('Esse cervejeiro não existe!');
-    }
 
     return brewer;
   }
@@ -27,17 +23,15 @@ export default class FakeBrewerRepository implements IBrewerRepository {
     return brewer;
   }
 
-  public async findOneAndDelete(brewer_id: string): Promise<never[]> {
+  public async delete(brewer_id: string): Promise<void> {
     const indexOfBrewer = this.brewers.findIndex(
       brewer => brewer.id === brewer_id,
     );
 
     this.brewers.splice(indexOfBrewer, 1);
-
-    return [];
   }
 
-  public async find(): Promise<Brewer[] | undefined> {
+  public async find(): Promise<Brewer[] | []> {
     return this.brewers;
   }
 
@@ -53,12 +47,8 @@ export default class FakeBrewerRepository implements IBrewerRepository {
     return brewer;
   }
 
-  public async findById(id: string): Promise<Brewer> {
+  public async findById(id: string): Promise<Brewer | undefined> {
     const brewer = this.brewers.find(item => item.id === id);
-
-    if (!brewer) {
-      throw new AppError('Esse cervejeiro já existe');
-    }
 
     return brewer;
   }
