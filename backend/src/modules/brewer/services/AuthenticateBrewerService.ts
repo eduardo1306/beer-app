@@ -39,7 +39,7 @@ export default class AuthenticateBrewerService {
     );
 
     if (!passwordMatch) {
-      throw new AppError('A senha está incorreta!');
+      throw new AppError('A senha está incorreta!', 401);
     }
 
     const { expiresIn, secret } = authConfig.jwt;

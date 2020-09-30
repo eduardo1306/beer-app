@@ -1,5 +1,7 @@
 import { container } from 'tsyringe';
 
+import '@modules/brewer/providers/HashProvider/index';
+
 import IBeerRepository from '@modules/beer/repositories/IBeerRepository';
 import BeerRepository from '@modules/beer/infra/typeorm/repository/BeerRepository';
 
