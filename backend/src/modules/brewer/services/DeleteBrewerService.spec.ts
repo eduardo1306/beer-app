@@ -2,15 +2,18 @@ import FakeBrewerRepository from '@modules/brewer/repositories/fakes/FakeBrewerR
 import DeleteBrewerService from '@modules/brewer/services/DeleteBrewerService';
 import CreateBrewerService from '@modules/brewer/services/CreateBrewerService';
 import AppError from '@shared/error/AppError';
+import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 
 let brewerRepository: FakeBrewerRepository;
 let deleteBrewer: DeleteBrewerService;
 let createBrewer: CreateBrewerService;
+let fakeHashProvider: FakeHashProvider;
 describe('DeleteBrewerService', () => {
   beforeEach(() => {
     brewerRepository = new FakeBrewerRepository();
+    fakeHashProvider = new FakeHashProvider();
     deleteBrewer = new DeleteBrewerService(brewerRepository);
-    createBrewer = new CreateBrewerService(brewerRepository);
+    createBrewer = new CreateBrewerService(brewerRepository, fakeHashProvider);
   });
   it('should be able to delete an exist brewer', async () => {
     const brewer = await createBrewer.execute({
