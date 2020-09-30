@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Exclude } from 'class-transformer';
+
 @Entity('brewer')
 class Brewer {
   @PrimaryGeneratedColumn('uuid')
@@ -27,6 +29,7 @@ class Brewer {
   whatsapp: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()

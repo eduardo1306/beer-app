@@ -38,8 +38,6 @@ export default class BrewerController {
         whatsapp,
       });
 
-      delete brewer.password;
-
       return response.json(brewer);
     } catch (err) {
       return response.json({ message: err.message });
