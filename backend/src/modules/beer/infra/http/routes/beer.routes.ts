@@ -2,19 +2,19 @@ import { Router } from 'express';
 import { celebrate } from 'celebrate';
 
 import { beerCreateCelebrateConfig } from '@config/celebrate';
-import BeerController from '../controllers/BeerController';
+import ensureAuthenticated from '@modules/brewer/infra/http/middlewares/ensureAuthenticated';
+import CreateBeerController from '../controllers/CreateBeerController';
 
 const beerRouter = Router();
-const beerController = new BeerController();
+const createBeerController = new CreateBeerController();
 
 beerRouter.post(
-  '/:brewer_id',
+  '/',
+  ensureAuthenticated,
   celebrate(beerCreateCelebrateConfig),
-  beerController.create,
+  createBeerController.create,
 );
-
-beerRouter.get('/:brewer_id', beerController.index);
-
-beerRouter.delete('/:brewer_id', beerController.delete);
+// beerRouter.get('/', createBeerController.index);
+// beerRouter.delete('/:id', ensureAuthenticated, createBeerController.delete);
 
 export default beerRouter;
