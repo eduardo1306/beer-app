@@ -16,11 +16,11 @@ export default class BeerRepository implements IBeerRepository {
     return this.ormRepository.save(beer);
   }
 
-  public async findBeer(
+  public async findBrewerBeers(
     beer_id: string,
     brewer_id: string,
-  ): Promise<Beer | undefined> {
-    const beer = await this.ormRepository.findOne({
+  ): Promise<Beer[] | undefined> {
+    const beer = await this.ormRepository.find({
       where: {
         brewer_id,
         id: beer_id,
@@ -31,7 +31,12 @@ export default class BeerRepository implements IBeerRepository {
   }
 
   public async delete(beer_id: string, brewer_id: string): Promise<void> {
-    const beer = await this.findBeer(beer_id, brewer_id);
+    const beer = await this.ormRepository.findOne({
+      where: {
+        id: beer_id,
+        brewer_id,
+      },
+    });
 
     if (!beer) {
       throw new AppError('Essa cerveja/cervejeiro não existe!');
